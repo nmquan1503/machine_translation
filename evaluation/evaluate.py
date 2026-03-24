@@ -18,7 +18,7 @@ def evaluate():
         eos_token_id=tokenizer.eos_id,
         model_dim=config.MODEL_DIM,
         state_dim=config.STATE_DIM,
-        conv_kernel=config.CONV_KETNEL,
+        conv_kernel=config.CONV_KERNEL,
         num_layers=config.NUM_LAYERS
     )).to(device)
 

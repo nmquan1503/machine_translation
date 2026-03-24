@@ -13,7 +13,7 @@ SPM_MODEL_PATH = "spm.model"
 # Model Config
 MODEL_DIM = 256
 STATE_DIM = 16
-CONV_KETNEL = 4
+CONV_KERNEL = 4
 NUM_LAYERS = 4
 
 #Training Config
