@@ -2,6 +2,7 @@ from torch.utils.data import Dataset
 import torch
 
 from .tokenizer import Tokenizer
+from .preprocess import preprocess_texts
 
 class MTDataset(Dataset):
     def __init__(
@@ -12,10 +13,10 @@ class MTDataset(Dataset):
     ):
         with open(src_text_path, "r", encoding="utf-8") as f:
             src_texts = f.readlines()
-            src_texts = [text.strip() for text in src_texts]
+            src_texts = preprocess_texts(src_texts)
         with open(tgt_text_path, "r", encoding="utf-8") as f:
             tgt_texts = f.readlines()
-            tgt_texts = [text.strip() for text in tgt_texts]
+            tgt_texts = preprocess_texts(tgt_texts)
         
         if len(src_texts) != len(tgt_texts):
             raise ValueError("source and target must have same length")
