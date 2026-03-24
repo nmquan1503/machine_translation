@@ -9,3 +9,21 @@ TEST_TGT_PATH = ""
 # Tokenizer Config
 VOCAB_SIZE = 32000
 SPM_MODEL_PATH = "spm.model"
+
+# Model Config
+MODEL_DIM = 256
+STATE_DIM = 16
+CONV_KETNEL = 4
+NUM_LAYERS = 4
+
+#Training Config
+BATCH_SIZE = 32
+NUM_EPOCHS = 20
+LAST_CHECKPOINT_PATH = "last_checkpoint.pt"
+BEST_MODEL_PATH = "best_model.pt"
+LEARNING_RATE = 3e-4
+RESUME_TRAINING = False
+
+# Infer Config
+MAX_NEW_TOKENS = 150
+TEMPERATURE = 1.0
