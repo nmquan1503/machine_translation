@@ -44,7 +44,7 @@ class Tokenizer:
             if isinstance(texts, str):
                 ids = ids + [self.eos_id]
             else:
-                ids = [[self.eos_id] + i for i in ids]
+                ids = [i + [self.eos_id] for i in ids]
         
         return ids
 

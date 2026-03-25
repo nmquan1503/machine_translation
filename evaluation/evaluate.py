@@ -47,7 +47,7 @@ def evaluate():
             all_refs.append(tgt_text)
 
     bleu = sacrebleu.corpus_bleu(all_preds, [all_refs])
-    print(f"\nBLEU: {bleu:.4f}")
+    print(f"\nBLEU: {bleu.score:.4f}")
 
 if __name__ == "__main__":
     evaluate()
