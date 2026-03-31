@@ -19,8 +19,8 @@ def train():
         vocab_size=config.VOCAB_SIZE,
         ssm_cfg={
             "layer": config.TYPE,
-            "N": config.STATE_DIM,
-            "l_max": 512
+            "d_state": config.STATE_DIM,
+            "d_conv": config.CONV_KERNEL
         },
         attn_layer_idx=config.ATTENTION_LAYERS,
         attn_cfg={
