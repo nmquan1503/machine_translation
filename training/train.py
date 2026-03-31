@@ -31,7 +31,7 @@ def train():
         residual_in_fp32=True,
         tie_embeddings=True,
         pad_vocab_size_multiple=1
-    ), device)
+    ), device=device)
 
     total_params = sum(p.numel() for p in model.parameters())
     print(f"Total params: {total_params:,}")
