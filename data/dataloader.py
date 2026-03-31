@@ -7,28 +7,34 @@ from .dataset import MTDataset
 from .tokenizer import Tokenizer
 import config
 
-def collate_fn(batch, pad_id):
+def collate_fn(batch, pad_id, mode):
     input_ids = [item["input_ids"] for item in batch]
-    target_ids = [item["target_ids"] for item in batch]
-
-    input_lengths = torch.tensor([ip.size(0) for ip in input_ids], dtype=torch.long)
     input_ids = pad_sequence(input_ids, batch_first=True, padding_value=pad_id)
-    target_ids = pad_sequence(target_ids, batch_first=True, padding_value=pad_id)
 
-    return {
-        "input_ids": input_ids,
-        "input_lengths": input_lengths,
-        "target_ids": target_ids
-    }
+    if mode == "train":
+        labels = [item["labels"] for item in batch]
+        labels = pad_sequence(labels, batch_first=True, padding_value=pad_id)
+        return {
+            "input_ids": input_ids,
+            "labels": labels
+        }
+
+    else:
+        output_ids = [item["output_ids"] for item in batch]
+        return {
+            "input_ids": input_ids,
+            "output_ids": output_ids
+        }
 
 def build_dataloader(
     src_text_path: str, 
     tgt_text_path: str, 
     tokenizer: Tokenizer,
-    shuffle=True
+    shuffle=True,
+    mode="train"
 ):
-    dataset = MTDataset(src_text_path, tgt_text_path, tokenizer)
-    collate = partial(collate_fn, pad_id=tokenizer.pad_id)
+    dataset = MTDataset(src_text_path, tgt_text_path, tokenizer, mode)
+    collate = partial(collate_fn, pad_id=tokenizer.pad_id, mode=mode)
     return DataLoader(
         dataset,
         batch_size=config.BATCH_SIZE,

@@ -1,6 +1,7 @@
 import torch
 
-from ssm_mamba import Seq2SeqModel, Seq2SeqModelConfig
+from mamba.mamba_ssm.models.config_mamba import MambaConfig
+from mamba.mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 from data.tokenizer import Tokenizer
 from data.dataloader import build_dataloader
 from .trainer import Trainer
@@ -10,16 +11,27 @@ def train():
     tokenizer = Tokenizer()
     train_loader = build_dataloader(config.TRAIN_SRC_PATH, config.TRAIN_TGT_PATH, tokenizer)
     dev_loader = build_dataloader(config.DEV_SRC_PATH, config.DEV_TGT_PATH, tokenizer, False)
-    model = Seq2SeqModel(Seq2SeqModelConfig(
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model = MambaLMHeadModel(MambaConfig(
+        d_model=config.MODEL_DIM,
+        n_layer=config.NUM_LAYERS,
+        d_intermediate=config.INNER_DIM,
         vocab_size=config.VOCAB_SIZE,
-        pad_token_id=tokenizer.pad_id,
-        bos_token_id=tokenizer.bos_id,
-        eos_token_id=tokenizer.eos_id,
-        model_dim=config.MODEL_DIM,
-        state_dim=config.STATE_DIM,
-        conv_kernel=config.CONV_KERNEL,
-        num_layers=config.NUM_LAYERS
-    ))
+        ssm_cfg={
+            "layer": config.TYPE,
+            "N": config.STATE_DIM,
+            "l_max": 512
+        },
+        attn_layer_idx=config.ATTENTION_LAYERS,
+        attn_cfg={
+            "num_heads": config.NUM_HEADS
+        },
+        rms_norm=config.USE_RMS_NORM, 
+        fused_add_norm=config.USE_FUSE_ADD_NORM,
+        residual_in_fp32=True,
+        tie_embeddings=True,
+        pad_vocab_size_multiple=1
+    ), device)
 
     total_params = sum(p.numel() for p in model.parameters())
     print(f"Total params: {total_params:,}")

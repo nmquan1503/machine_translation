@@ -43,17 +43,13 @@ class Trainer:
             self.optimizer.zero_grad()
             
             input_ids = batch["input_ids"].to(self.device)
-            input_lengths = batch["input_lengths"].to(self.device)
-            target_ids = batch["target_ids"].to(self.device)
+            labels = batch["labels"].to(self.device)
 
-            decoder_input = target_ids[:, :-1]
-            labels = target_ids[:, 1:]
-
-            logits = self.model(input_ids, input_lengths, decoder_input)
+            logits = self.model(input_ids).logits
 
             loss = self.criterion(
                 logits.view(-1, config.VOCAB_SIZE),
-                labels.reshape(-1)
+                labels.view(-1)
             )
 
             loss.backward()
@@ -70,17 +66,13 @@ class Trainer:
         total_loss = 0.0
         for batch in tqdm(self.dev_loader, desc="Eval"):
             input_ids = batch["input_ids"].to(self.device)
-            input_lengths = batch["input_lengths"].to(self.device)
-            target_ids = batch["target_ids"].to(self.device)
+            labels = batch["labels"].to(self.device)
 
-            decoder_input = target_ids[:, :-1]
-            labels = target_ids[:, 1:]
-
-            logits = self.model(input_ids, input_lengths, decoder_input)
+            logits = self.model(input_ids).logits
             
             loss = self.criterion(
                 logits.view(-1, config.VOCAB_SIZE),
-                labels.reshape(-1)
+                labels.view(-1)
             )
 
             total_loss += loss.item()

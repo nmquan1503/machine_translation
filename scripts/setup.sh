@@ -1,9 +1,9 @@
 set -e
 
 echo "Cloning Mamba..."
-git clone https://github.com/nmquan1503/ssm-mamba.git ssm_mamba -q
+git clone https://github.com/state-spaces/mamba.git mamba -q
 
-cd ssm_mamba
+cd mamba
 
 echo "Installing Mamba..."
 pip install . --no-build-isolation -q
