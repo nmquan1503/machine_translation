@@ -12,6 +12,12 @@ pip install . --no-build-isolation -q
 
 cd ..
 
+echo "Installing Causal-conv1d..."
+git clone https://github.com/Dao-AILab/causal-conv1d.git -q
+cd causal_conv1d
+pip install . --no-build-isolation -q
+cd ..
+
 echo "Installing required libs..."
 pip install sacrebleu -q
 
