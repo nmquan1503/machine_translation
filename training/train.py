@@ -20,7 +20,8 @@ def train():
         ssm_cfg={
             "layer": config.TYPE,
             "d_state": config.STATE_DIM,
-            "d_conv": config.CONV_KERNEL
+            "d_conv": config.CONV_KERNEL,
+            "use_mem_eff_path": False
         },
         attn_layer_idx=config.ATTENTION_LAYERS,
         attn_cfg={

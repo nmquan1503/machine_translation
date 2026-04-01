@@ -20,7 +20,8 @@ def evaluate():
         ssm_cfg={
             "layer": config.TYPE,
             "d_state": config.STATE_DIM,
-            "d_conv": config.CONV_KERNEL
+            "d_conv": config.CONV_KERNEL,
+            "use_mem_eff_path": False
         },
         attn_layer_idx=config.ATTENTION_LAYERS,
         attn_cfg={
@@ -44,15 +45,18 @@ def evaluate():
         input_ids = batch["input_ids"].to(device)
         output_ids = batch["output_ids"]
 
-        with torch.no_grad():
-            seq_ids = model.generate(input_ids, max_length=config.MAX_NEW_TOKENS, eos_token_id=tokenizer.eos_id, cg=True).cpu()
+        for i in range(input_ids.size(0)):
+            single_input = input_ids[i].unsqueeze(0)
+            single_output = output_ids[i]
 
-        for pred, tgt in zip(seq_ids, output_ids):
-            pred = pred.tolist()
-            tgt = tgt.tolist()
+            with torch.no_grad():
+                seq_ids = model.generate(single_input, max_length=config.MAX_NEW_TOKENS, eos_token_id=tokenizer.eos_id, cg=True).cpu()
+
+            pred = seq_ids[0].tolist()
+            pred = pred[pred.index(tokenizer.bos_id)]
 
             pred_text = tokenizer.decode(pred)
-            tgt_text = tokenizer.decode(tgt)
+            tgt_text = tokenizer.decode(single_output)
 
             all_preds.append(pred_text)
             all_refs.append(tgt_text)
