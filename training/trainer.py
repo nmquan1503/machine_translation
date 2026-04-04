@@ -45,7 +45,7 @@ class Trainer:
             input_ids = batch["input_ids"].to(self.device)
             labels = batch["labels"].to(self.device)
 
-            logits = self.model(input_ids).logits
+            logits = self.model(input_ids)
 
             loss = self.criterion(
                 logits.view(-1, config.VOCAB_SIZE),
