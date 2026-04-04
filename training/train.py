@@ -21,7 +21,7 @@ def train():
             "layer": config.TYPE,
             "d_state": config.STATE_DIM,
             "d_conv": config.CONV_KERNEL,
-            "use_mem_eff_path": False
+            "use_mem_eff_path" if config.TYPE == "Mamba2" else "use_fast_path": False
         },
         attn_layer_idx=config.ATTENTION_LAYERS,
         attn_cfg={
