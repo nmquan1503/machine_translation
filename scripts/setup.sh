@@ -1,7 +1,6 @@
 set -e
 
 echo "Cloning Mamba..."
-git clone https://github.com/state-spaces/mamba.git mamba -q
 export PYTHONPATH="$PWD/mamba:$PYTHONPATH"
 touch mamba/__init__.py
 
