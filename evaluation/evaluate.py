@@ -66,7 +66,8 @@ def evaluate():
         output_ids = batch["output_ids"]
 
         for i in range(input_ids.size(0)):
-            single_input = input_ids[i].unsqueeze(0)
+            single_input = input_ids[i]
+            single_input = single_input[single_input != tokenizer.pad_id].unsqueeze(0)
             single_output = output_ids[i]
 
             with torch.no_grad():
