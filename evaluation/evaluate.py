@@ -25,7 +25,7 @@ def evaluate():
         ssm_cfg["use_mem_eff_path"] = False
         ssm_cfg["sequence_parallel"] = False
         ssm_cfg["chunk_size"] = config.CHUNK_SIZE
-        ssm_cfg["headdim"] = config.MODEL_DIM * 2 / config.NUM_HEADS
+        ssm_cfg["headdim"] = config.MODEL_DIM * 2 // config.NUM_HEADS
         ssm_cfg["bias"] = True
         ssm_cfg["conv_bias"] = True
         ssm_cfg["ngroups"] = config.NUM_GROUPS
@@ -33,7 +33,7 @@ def evaluate():
         ssm_cfg["mimo"] = True
         ssm_cfg["mimo_rank"] = config.MIMO_RANK
         ssm_cfg["chunk_size"] = 64 // config.MIMO_RANK
-        ssm_cfg["headdim"] = config.MODEL_DIM * 2 / config.NUM_HEADS
+        ssm_cfg["headdim"] = config.MODEL_DIM * 2 // config.NUM_HEADS
         ssm_cfg["ngroups"] = config.NUM_GROUPS
     model = MambaLMHeadModel(MambaConfig(
         d_model=config.MODEL_DIM,
