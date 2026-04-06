@@ -8,6 +8,24 @@ from data.dataloader import build_dataloader
 from mamba.mamba_ssm.models.config_mamba import MambaConfig
 from mamba.mamba_ssm.models.mixer_seq_simple import MambaLMHeadModel
 
+def greedy_generate_full_recompute(model, input_ids, max_new_tokens, eos_token_id):
+    """
+    input_ids: (1, src_len)
+    return: (generated_len,)
+    """
+    generated = input_ids.clone()
+
+    for _ in range(max_new_tokens):
+        logits = model(generated).logits   # (1, seq, vocab)
+        next_token = logits[:, -1, :].argmax(dim=-1, keepdim=True)  # (1,1)
+
+        generated = torch.cat([generated, next_token], dim=1)
+
+        if next_token.item() == eos_token_id:
+            break
+
+    return generated[0]
+
 def evaluate():
     tokenizer = Tokenizer()
     test_loader = build_dataloader(config.TEST_SRC_PATH, config.TEST_TGT_PATH, tokenizer, False, mode="test")
@@ -71,9 +89,13 @@ def evaluate():
             single_output = output_ids[i]
 
             with torch.no_grad():
-                seq_ids = model.generate(single_input, max_length=config.MAX_NEW_TOKENS, eos_token_id=tokenizer.eos_id, cg=True).cpu()
-
-            pred = seq_ids[0].tolist()
+                seq_ids = greedy_generate_full_recompute(
+                    model,
+                    single_input,
+                    config.MAX_NEW_TOKENS,
+                    tokenizer.eos_id
+                ).cpu()
+            pred = seq_ids.tolist()
             pred = pred[pred.index(tokenizer.bos_id):]
 
             pred_text = tokenizer.decode(pred)
