@@ -35,7 +35,6 @@ def evaluate():
         ssm_cfg["chunk_size"] = 64 // config.MIMO_RANK
         ssm_cfg["headdim"] = config.MODEL_DIM * 2 / config.NUM_HEADS
         ssm_cfg["ngroups"] = config.NUM_GROUPS
-        ssm_cfg["dtype"] = torch.float32
     model = MambaLMHeadModel(MambaConfig(
         d_model=config.MODEL_DIM,
         n_layer=config.NUM_LAYERS,
