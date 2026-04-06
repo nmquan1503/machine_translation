@@ -52,7 +52,7 @@ def evaluate():
         residual_in_fp32=True,
         tie_embeddings=True,
         pad_vocab_size_multiple=1
-    ), device=device)
+    ), device=device, dtype=torch.float32)
 
     model.load_state_dict(torch.load(config.BEST_MODEL_PATH, map_location=device))
 

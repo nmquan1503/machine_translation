@@ -39,7 +39,7 @@ def create_block(
     fused_add_norm=False,
     layer_idx=None,
     device=None,
-    dtype=torch.float32,
+    dtype=None,
 ):
     if ssm_cfg is None:
         ssm_cfg = {}
