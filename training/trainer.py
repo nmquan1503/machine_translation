@@ -26,6 +26,7 @@ class Trainer:
         self.train_losses = []
         self.dev_losses = []
         self.start_epoch = 1
+        self.no_improve_epochs = 0
     
         if config.RESUME_TRAINING:
             checkpoint = torch.load(config.LAST_CHECKPOINT_PATH, map_location=self.device)
@@ -94,6 +95,9 @@ class Trainer:
                 self.best_dev_loss = dev_loss
                 torch.save(self.model.state_dict(), config.BEST_MODEL_PATH)
                 print(">>> Save best model")
+                self.no_improve_epochs = 0
+            else:
+                self.no_improve_epochs += 1
             
             torch.save({
                 "model": self.model.state_dict(),
@@ -101,3 +105,6 @@ class Trainer:
                 "train_losses": self.train_losses,
                 "dev_losses": self.dev_losses
             }, config.LAST_CHECKPOINT_PATH)
+
+            if self.no_improve_epochs >= 3: 
+                break
