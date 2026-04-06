@@ -7,7 +7,7 @@ touch mamba/__init__.py
 cd mamba
 
 echo "Installing Mamba..."
-pip install . --no-build-isolation -q
+pip install -e . --no-build-isolation -q
 
 cd ..
 

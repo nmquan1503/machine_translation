@@ -52,7 +52,7 @@ def train():
         residual_in_fp32=True,
         tie_embeddings=True,
         pad_vocab_size_multiple=1
-    ), device="cuda", dtype=torch.float32)
+    ), device=device, dtype=torch.float32)
 
     total_params = sum(p.numel() for p in model.parameters())
     print(f"Total params: {total_params:,}")
