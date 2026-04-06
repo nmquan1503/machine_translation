@@ -85,7 +85,7 @@ class Mamba3(nn.Module):
 
         # Order: [z, x, B, C, dd_dt, dd_A, trap, angle]
         d_in_proj = 2 * self.d_inner + 2 * self.d_state * self.num_bc_heads * self.mimo_rank + 3 * self.nheads + self.num_rope_angles
-        self.in_proj = nn.Linear(self.d_model, d_in_proj, bias=False, **factory_kwargs)
+        self.in_proj = nn.Linear(self.d_model, d_in_proj, bias=False)
 
         # dt_bias parameterization        
         _dt = torch.exp(
