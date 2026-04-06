@@ -88,6 +88,9 @@ class Mamba3(nn.Module):
         try:
             self.in_proj = nn.Linear(self.d_model, d_in_proj, bias=False, **factory_kwargs)
         except:
+            print("ok")
+            print(self.d_model)
+            print(d_in_proj)
             print("okkkkk")
 
         # dt_bias parameterization        
