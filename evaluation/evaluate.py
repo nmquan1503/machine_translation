@@ -45,7 +45,6 @@ def evaluate():
         attn_cfg={
             "num_heads": config.NUM_HEADS,
             "causal": True,
-            "embed_dim": config.MODEL_DIM
         },
         rms_norm=True, 
         fused_add_norm=True,
